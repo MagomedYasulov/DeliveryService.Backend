@@ -126,6 +126,12 @@
   <data name="Detail" xml:space="preserve">
     <value>See the errors property for details.</value>
   </data>
+  <data name="NotFoundOrder" xml:space="preserve">
+    <value>Not Found Order.</value>
+  </data>
+  <data name="NotFoundOrderDesc" xml:space="preserve">
+    <value>Not found order with id '{0}'.</value>
+  </data>
   <data name="Title400" xml:space="preserve">
     <value>One or more validation errors occurred.</value>
   </data>

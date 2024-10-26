@@ -126,6 +126,12 @@
   <data name="Detail" xml:space="preserve">
     <value>Подробности смотрите в свойстве errors.</value>
   </data>
+  <data name="NotFoundOrder" xml:space="preserve">
+    <value>Заказ не найден.</value>
+  </data>
+  <data name="NotFoundOrderDesc" xml:space="preserve">
+    <value>Заказ с id '{0}' не найден.</value>
+  </data>
   <data name="Title400" xml:space="preserve">
     <value>Одно или несколько полей не прошли валидацию.</value>
   </data>

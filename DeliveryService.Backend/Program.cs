@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.OpenApi.Models;
+using NLog.Extensions.Logging;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -102,6 +103,15 @@ namespace DeliveryService.Backend
 
             #endregion
 
+            #region Logging
+            builder.Services.AddLogging(loggingBuilder =>
+            {
+                // configure Logging with NLog
+                loggingBuilder.ClearProviders();
+                loggingBuilder.AddNLog();  // NLog.Extensions.Logging v5 will automatically load from appsettings.json
+            });
+            #endregion
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
@@ -125,12 +135,12 @@ namespace DeliveryService.Backend
                 }
             }
 
-                // Configure the HTTP request pipeline.
-                if (app.Environment.IsDevelopment())
-                {
-                    app.UseSwagger();
-                    app.UseSwaggerUI();
-                }
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
             app.UseRequestLocalization(new RequestLocalizationOptions
             {

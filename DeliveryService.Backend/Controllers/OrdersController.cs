@@ -14,15 +14,26 @@ namespace DeliveryService.Backend.Controllers
     [ApiController]
     public class OrdersController : BaseController
     {
-        public OrdersController(IRepository repository, IMapper mapper, IStringLocalizer<BaseController> localizer) : base(repository,localizer,mapper)
-        {
+        private readonly ILogger<OrdersController> _logger;
 
+        public OrdersController(
+            IRepository repository, 
+            IMapper mapper, 
+            IStringLocalizer<BaseController> localizer,
+            ILogger<OrdersController> logger) : base(repository,localizer,mapper)
+        {
+            _logger = logger;
         }
 
         [HttpGet("{orderId}")]
         public ActionResult<OrderDTO> GetOrder(int orderId)
         {
-            var order = _repository.GetById<Order, OrderDTO>(orderId, o => o.CityDistrict);
+            
+            var order = _repository.GetById<Order, OrderDTO>(orderId);
+            if(order == null)
+               return NotFound(new NotFoundDescription(_localizer["NotFoundOrder"], _localizer["NotFoundOrderDesc", orderId]));
+            
+            _logger.LogInformation("Return order | Id: {Id} | CityDistrict: {CityDistrict} | DeliveryTime: {DeliveryTime} | Weight: {Weight}", order.Id, order.CityDistrict, order.DeliveryTime, order.Weight);
             return Ok(order);
         }
 
@@ -37,6 +48,7 @@ namespace DeliveryService.Backend.Controllers
                                                      (isFirstDeliveryDateTime || (o.DeliveryTime >= model.FirstDeliveryDateTime && o.DeliveryTime <= endDeliveryTime));
             
             var orders = _repository.Get<Order, OrderDTO>(exp);
+            _logger.LogInformation("Return orders | CityDistrict: {CityDistrict} | FirstDeliveryDateTime: {FirstDeliveryDateTime} | TimeOffset: {TimeOffset}", model.CityDistrict, model.FirstDeliveryDateTime, model.TimeOffset);
             return Ok(orders);
         }
 
@@ -54,6 +66,7 @@ namespace DeliveryService.Backend.Controllers
             _repository.Save();
 
             var orderDTO = _mapper.Map<OrderDTO>(order);
+            _logger.LogInformation("Create order | Id: {Id} | DeliveryTime: {DeliveryTime} | CityDistrict: {CityDistrict} | Weight: {Weight}", order.Id, order.DeliveryTime, order.CityDistrict, order.Weight);
             return Ok(orderDTO);
         }
 
@@ -72,6 +85,7 @@ namespace DeliveryService.Backend.Controllers
             _repository.Save();
 
             var orderDTO = _mapper.Map<OrderDTO>(order);
+            _logger.LogInformation("Update order | Id: {0} | DeliveryTime: {1} | CityDistrict: {2} | Weight: {3}", order.Id, order.DeliveryTime, order.CityDistrict, order.Weight);
             return Ok(orderDTO);
         }
 
@@ -84,6 +98,7 @@ namespace DeliveryService.Backend.Controllers
             _repository.Delete<Order>(o => o.Id == orderId);
             _repository.Save();
 
+            _logger.LogInformation("Delete order | Id: {orderId}", orderId);
             return Ok();
         }
     }
