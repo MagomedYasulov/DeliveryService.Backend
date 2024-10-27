@@ -67,7 +67,7 @@ namespace DeliveryService.Backend.Controllers
 
             var orderDTO = _mapper.Map<OrderDTO>(order);
             _logger.LogInformation("Create order | Id: {Id} | DeliveryTime: {DeliveryTime} | CityDistrict: {CityDistrict} | Weight: {Weight}", order.Id, order.DeliveryTime, order.CityDistrict, order.Weight);
-            return Ok(orderDTO);
+            return Created("",orderDTO);
         }
 
 
@@ -85,7 +85,7 @@ namespace DeliveryService.Backend.Controllers
             _repository.Save();
 
             var orderDTO = _mapper.Map<OrderDTO>(order);
-            _logger.LogInformation("Update order | Id: {0} | DeliveryTime: {1} | CityDistrict: {2} | Weight: {3}", order.Id, order.DeliveryTime, order.CityDistrict, order.Weight);
+            _logger.LogInformation("Update order | Id: {Id} | DeliveryTime: {DeliveryTime} | CityDistrict: {CityDistrict} | Weight: {Weight}", order.Id, order.DeliveryTime, order.CityDistrict, order.Weight);
             return Ok(orderDTO);
         }
 

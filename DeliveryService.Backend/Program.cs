@@ -114,12 +114,12 @@ namespace DeliveryService.Backend
 
             var app = builder.Build();
 
+            #region Init Database
             using (var scope = app.Services.CreateScope())
             {
                 var repository = scope.ServiceProvider.GetRequiredService<IRepository>();
                 if(!repository.Any<Order>())
                 {
-                    var rnd = new Random();
                     for(var i=0;i< 400; i++)
                     {
                         var order = new Order()
@@ -134,6 +134,7 @@ namespace DeliveryService.Backend
                     repository.Save();
                 }
             }
+            #endregion
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
